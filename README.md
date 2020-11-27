@@ -4,11 +4,11 @@
 
 - Elasticsearch 7.10.0 : 
 
-```<https://www.elastic.co/fr/downloads/elasticsearch>```
+```https://www.elastic.co/fr/downloads/elasticsearch```
 
 - Kibana 7.10.0 :
  
-```<https://www.elastic.co/fr/downloads/kibana>```
+```https://www.elastic.co/fr/downloads/kibana```
 
 - Java 1.8
 
@@ -43,7 +43,7 @@
 
 ### Fonctionnement
 
-- Pour lancer l'application, exectuer le fichier **Projet3Application**
+Pour lancer l'application, exectuer le fichier **Projet3Application**
     
 Les fichiers de test permettent de vous rendre compte du fonctionnement
 
@@ -53,7 +53,7 @@ Les fichiers de test permettent de vous rendre compte du fonctionnement
 
 Acces à kibana : 
 
-    <http://localhost:5601/>
+    http://localhost:5601/
 
 Une fois dessus il faut créer un index patern pour les CV
 
