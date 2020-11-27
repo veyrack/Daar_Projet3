@@ -11,7 +11,7 @@ import org.springframework.context.annotation.Bean;
 
 
 @Configuration
-@EnableElasticsearchRepositories(basePackages = "com.daar.projet3.repository")
+@EnableElasticsearchRepositories(basePackages = "com.daar.projet3.repositories")
 public class EsConfig {
 
     @Value("${elasticsearch.host}")

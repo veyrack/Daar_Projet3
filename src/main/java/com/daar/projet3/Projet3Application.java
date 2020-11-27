@@ -1,7 +1,7 @@
 package com.daar.projet3;
 
-import com.daar.projet3.model.CV;
-import com.daar.projet3.service.CvService;
+import com.daar.projet3.models.CV;
+import com.daar.projet3.services.CvService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

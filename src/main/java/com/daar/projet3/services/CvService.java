@@ -1,6 +1,6 @@
-package com.daar.projet3.service;
+package com.daar.projet3.services;
 
-import com.daar.projet3.model.CV;
+import com.daar.projet3.models.CV;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 

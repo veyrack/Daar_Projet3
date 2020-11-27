@@ -1,4 +1,4 @@
-package com.daar.projet3.model;
+package com.daar.projet3.models;
 
 public enum Competence {
     c,

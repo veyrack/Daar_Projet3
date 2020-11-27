@@ -2,10 +2,8 @@ package com.daar.projet3.utils;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.List;
 
-import com.daar.projet3.model.CV;
-import com.daar.projet3.model.Competence;
+import com.daar.projet3.models.Competence;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.text.PDFTextStripper;
 
@@ -15,7 +13,7 @@ public class ParsingPDF {
     public static void main(String[] args) {
     //public CV parsePDF(String filename) throws FormatException{
         //String cv = filename;
-        String cv = "CV_Veyrack.pdf";//"Brunet_Maxence_CV.pdf";
+        String cv = "CV_Veyrack.pdf";//"CV_Maxence.pdf";
         File file = new File ("src/main/java/com/daar/projet3/utils/ressources/"+cv);
         PDDocument doc;
 

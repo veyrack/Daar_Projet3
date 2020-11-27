@@ -1,8 +1,8 @@
 package com.daar.projet3;
 
 import org.junit.runner.RunWith;
-import com.daar.projet3.model.CV;
-import com.daar.projet3.service.CvService;
+import com.daar.projet3.models.CV;
+import com.daar.projet3.services.CvService;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -1,7 +1,7 @@
-package com.daar.projet3.service;
+package com.daar.projet3.services;
 
-import com.daar.projet3.model.CV;
-import com.daar.projet3.repository.CvRepository;
+import com.daar.projet3.models.CV;
+import com.daar.projet3.repositories.CvRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
