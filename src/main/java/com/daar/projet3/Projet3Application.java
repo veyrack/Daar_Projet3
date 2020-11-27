@@ -30,11 +30,11 @@ public class Projet3Application {
 		l.add("Haskell");
 		l2.add("Java");
 
-		cvService.save(new CV("1001", "Jean", "Lin", l));
-		cvService.save(new CV("1002", "Claude", "Lil", l2));
-		cvService.save(new CV("1003", "Pedro", "Lo", l2));
-		cvService.save(new CV("1007", "George", "Lala", l));
-		cvService.save(new CV("1008", "Max", "Li", l));
+		cvService.save(new CV("1001", "Jean", "Lin",23,"a@b.fr","01", l));
+		cvService.save(new CV("1002", "Claude", "Lil",23,"a@b.fr","01", l2));
+		cvService.save(new CV("1003", "Pedro", "Lo",23,"a@b.fr","01", l2));
+		cvService.save(new CV("1007", "George", "Lala",23,"a@b.fr","01", l));
+		cvService.save(new CV("1008", "Max", "Li",23,"a@b.fr","01", l));
 		//fuzzey search
 		CV cv = cvService.findOne("1001");
 

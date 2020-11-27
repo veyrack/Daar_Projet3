@@ -16,5 +16,8 @@ public class CV {
     private String id;
     private String prenom;
     private String nom;
+    private int age;
+    private String email;
+    private String numTel;
     private List<String> motsCles;
 }

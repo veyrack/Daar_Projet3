@@ -45,7 +45,7 @@ public class CvServiceTest {
         l.add("Java");
         l.add("C");
         l.add("Haskell");
-        CV cv = new CV("1001", "Jean", "Lin", l);
+        CV cv = new CV("1001", "Jean", "Lin",23,"a@b.fr","01", l);
         CV testCv = cvService.save(cv);
 
         assertNotNull(testCv.getId());
@@ -60,7 +60,7 @@ public class CvServiceTest {
         l.add("Java");
         l.add("C");
         l.add("Haskell");
-        CV cv = new CV("1001", "Jean", "Lin", l);
+        CV cv = new CV("1001", "Jean", "Lin",23,"a@b.fr","01", l);
         cvService.save(cv);
 
         CV testCV = cvService.findOne(cv.getId());
@@ -77,7 +77,7 @@ public class CvServiceTest {
         l.add("Java");
         l.add("C");
         l.add("Haskell");
-        CV cv = new CV("1001", "Jean", "Lin", l);
+        CV cv = new CV("1001", "Jean", "Lin",23,"a@b.fr","01", l);
         cvService.save(cv);
 
         List<CV> byFilter = cvService.findByMotsCles("Java");
@@ -96,11 +96,11 @@ public class CvServiceTest {
         l2.add("Java");
 
         List<CV> cvList = new ArrayList<>();
-        cvList.add(new CV("1001", "Jean", "Lin", l));
-        cvList.add(new CV("1002", "Claude", "Lil", l2));
-        cvList.add(new CV("1003", "Pedro", "Lo", l2));
-        cvList.add(new CV("1007", "George", "Lala", l));
-        cvList.add(new CV("1008", "Max", "Li", l));
+        cvList.add(new CV("1001", "Jean", "Lin",23,"a@b.fr","01", l));
+        cvList.add(new CV("1002", "Claude", "Lil",23,"a@b.fr","01", l2));
+        cvList.add(new CV("1003", "Pedro", "Lo",23,"a@b.fr","01", l2));
+        cvList.add(new CV("1007", "George", "Lala",23,"a@b.fr","01", l));
+        cvList.add(new CV("1008", "Max", "Li",23,"a@b.fr","01", l));
 
         for (CV cv : cvList)
             cvService.save(cv);
@@ -118,7 +118,7 @@ public class CvServiceTest {
         l.add("Java");
         l.add("C");
         l.add("Haskell");
-        CV cv = new CV("1001", "Elasticsearch Basics", "Rambabu Posa", l);
+        CV cv = new CV("1001", "Elasticsearch Basics", "Rambabu Posa",23,"a@b.fr","01", l);
 
         cvService.save(cv);
         cvService.delete(cv);
