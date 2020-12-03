@@ -2,16 +2,21 @@ package com.daar.projet3.ressources;
 
 import com.daar.projet3.models.CV;
 import com.daar.projet3.services.CvService;
+import com.daar.projet3.utils.FormatException;
+import com.daar.projet3.utils.ParsingPDF;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
 import java.net.URI;
 import java.util.List;
 
 @RestController
+@CrossOrigin(origins = "*", allowedHeaders = "*")
 @RequestMapping("/CV")
 public class CvController {
 
@@ -78,7 +83,15 @@ public class CvController {
 
 
     @PostMapping
-    public ResponseEntity<CV> create(@RequestBody CV cv) {
-        return ResponseEntity.created(URI.create("/CV")).body(cvService.save(cv));
+    public ResponseEntity<CV> create(@RequestParam("prenom") String prenom,
+                                     @RequestParam("nom") String nom,
+                                     @RequestPart("file") MultipartFile cv) {
+        CV res = null;
+        try {
+            res = ParsingPDF.parsePDF(cv,prenom,nom);
+        } catch (FormatException e) {
+            e.printStackTrace();
+        }
+        return ResponseEntity.created(URI.create("/CV/post")).body(cvService.save(res));
     }
 }

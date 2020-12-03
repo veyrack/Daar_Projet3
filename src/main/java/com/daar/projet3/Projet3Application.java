@@ -19,7 +19,7 @@ public class Projet3Application {
 	public static void main(String[] args) {
 		SpringApplication.run(Projet3Application.class, args);
 	}
-
+/*
 	public void run(String... args) throws Exception {
 
 		printElasticSearchInfo();
@@ -30,11 +30,11 @@ public class Projet3Application {
 		l.add("Haskell");
 		l2.add("Java");
 
-		cvService.save(new CV("1001", "Jean", "Lin",23,"a@b.fr","01", l));
-		cvService.save(new CV("1002", "Claude", "Lil",23,"a@b.fr","01", l2));
-		cvService.save(new CV("1003", "Pedro", "Lo",23,"a@b.fr","01", l2));
-		cvService.save(new CV("1007", "George", "Lala",23,"a@b.fr","01", l));
-		cvService.save(new CV("1008", "Max", "Li",23,"a@b.fr","01", l));
+		cvService.save(new CV(1001, "Jean", "Lin",23,"a@b.fr","01", l));
+		cvService.save(new CV(1002, "Claude", "Lil",23,"a@b.fr","01", l2));
+		cvService.save(new CV(1003, "Pedro", "Lo",23,"a@b.fr","01", l2));
+		cvService.save(new CV(1007, "George", "Lala",23,"a@b.fr","01", l));
+		cvService.save(new CV(1008, "Max", "Li",23,"a@b.fr","01", l));
 		//fuzzey search
 		CV cv = cvService.findOne("1001");
 
@@ -48,13 +48,14 @@ public class Projet3Application {
 	private void printElasticSearchInfo() {
 
 		System.out.println("--ElasticSearch--");
-		/*lient client = es.get
+		Client client = es.get
 				getClient();
 		Map<String, String> asMap = client.settings().getAsMap();
 
 		asMap.forEach((k, v) -> {
 			System.out.println(k + " = " + v);
 		});
-		System.out.println("--ElasticSearch--");*/
+		System.out.println("--ElasticSearch--");
 	}
+	*/
 }
