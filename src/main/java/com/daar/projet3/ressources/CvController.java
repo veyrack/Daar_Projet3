@@ -2,7 +2,6 @@ package com.daar.projet3.ressources;
 
 import com.daar.projet3.models.CV;
 import com.daar.projet3.services.CvService;
-import com.daar.projet3.utils.FormatException;
 import com.daar.projet3.utils.ParsingPDF;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -12,6 +11,8 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.net.URI;
 import java.util.List;
 
@@ -83,15 +84,23 @@ public class CvController {
 
 
     @PostMapping
-    public ResponseEntity<CV> create(@RequestParam("prenom") String prenom,
-                                     @RequestParam("nom") String nom,
-                                     @RequestPart("file") MultipartFile cv) {
-        CV res = null;
-        try {
-            res = ParsingPDF.parsePDF(cv,prenom,nom);
-        } catch (FormatException e) {
-            e.printStackTrace();
-        }
-        return ResponseEntity.created(URI.create("/CV/post")).body(cvService.save(res));
+    public ResponseEntity<CV> create(@RequestBody CV cv) {
+        return ResponseEntity.created(URI.create("/CV")).body(cvService.save(cv));
+    }
+
+    //PDF FILE -> Hop, dans la BD
+    //CV/file
+    //@CrossOrigin -> Sécurité du navigateur. Le naviagteur peut bloquer les requêtes post par sécurité
+    @PostMapping("/file")
+    public ResponseEntity<CV> envoiePDF(@RequestHeader("file") MultipartFile file) throws IOException {
+        // La conversion d'un multipartfile en file. Mettre dans une methode dans le parsingPDF
+        File convFile = new File( file.getOriginalFilename() );
+        FileOutputStream fos = new FileOutputStream( convFile );
+        fos.write( file.getBytes() );
+        fos.close();
+        //La creation du CV
+        CV cv =ParsingPDF.parse(convFile);
+        //L'envoie vers la BD
+        return ResponseEntity.created(URI.create("/CV")).body(cvService.save(cv));
     }
 }
