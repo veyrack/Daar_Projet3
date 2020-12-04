@@ -88,18 +88,23 @@ public class CvController {
         return ResponseEntity.created(URI.create("/CV")).body(cvService.save(cv));
     }
 
-    //PDF FILE -> Hop, dans la BD
+    //Creation du CV à partir d'un formulaire
     //CV/file
-    //@CrossOrigin -> Sécurité du navigateur. Le naviagteur peut bloquer les requêtes post par sécurité
     @PostMapping("/file")
-    public ResponseEntity<CV> envoiePDF(@RequestHeader("file") MultipartFile file) throws IOException {
+    public ResponseEntity<CV> envoiePDF(@RequestPart("file") MultipartFile file,
+                                        @RequestPart("nom") String nom,
+                                        @RequestPart("prenom") String prenom,
+                                        @RequestPart("mail") String mail,
+                                        @RequestPart("tel") String tel)
+            throws IOException {
+
         // La conversion d'un multipartfile en file. Mettre dans une methode dans le parsingPDF
         File convFile = new File( file.getOriginalFilename() );
         FileOutputStream fos = new FileOutputStream( convFile );
         fos.write( file.getBytes() );
         fos.close();
         //La creation du CV
-        CV cv =ParsingPDF.parse(convFile);
+        CV cv =ParsingPDF.parse(nom,prenom,mail,tel,convFile);
         //L'envoie vers la BD
         return ResponseEntity.created(URI.create("/CV")).body(cvService.save(cv));
     }

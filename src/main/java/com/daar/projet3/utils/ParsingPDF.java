@@ -52,7 +52,7 @@ public class ParsingPDF {
 
 
     }
-    public static CV parse(File file){
+    public static CV parse(String nom, String prenom, String mail, String tel,File file){
         PDDocument doc;
         CV moncv=null;
         try {
@@ -66,7 +66,7 @@ public class ParsingPDF {
             }
             String[] l = text.split("\n");
             //On récupère les infos de l'utilisateur
-            String [] infos = getAllInfo(l);
+            //String [] infos = getAllInfo(l);
 
             //On récupère ses compétences
             ArrayList<String> competences = getCompetences(l);
@@ -77,11 +77,11 @@ public class ParsingPDF {
 
             //Creation du CV
             moncv= new CV(String.valueOf(cpt++),
-                    infos[1],
-                    infos[0],
-                    Integer.parseInt(infos[2]),
-                    infos[3],
-                    infos[4],
+                    prenom,
+                    nom,
+                    40,
+                    mail,
+                    tel,
                     competences);
 
 
