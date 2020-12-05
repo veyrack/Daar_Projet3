@@ -1,4 +1,4 @@
-# project3front
+# appvue
 
 ## Project setup
 ```
