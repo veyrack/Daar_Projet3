@@ -31,4 +31,6 @@ public interface CvService {
     Page<CV> findByMotsCles(List<String> filtre, PageRequest pageRequest);
 
     List<CV> findByMotsCles(List<String> filtre);
+
+
 }

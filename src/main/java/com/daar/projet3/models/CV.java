@@ -7,7 +7,7 @@ import org.springframework.data.elasticsearch.annotations.Document;
 
 import java.util.List;
 
-@Document(indexName = "cv")
+@Document(indexName = "cv1")
 @Data
 @AllArgsConstructor
 public class CV {

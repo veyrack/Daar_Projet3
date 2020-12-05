@@ -26,4 +26,5 @@ public interface CvRepository extends ElasticsearchRepository<CV,String> {
     Page<CV> findByNom(String filtre, PageRequest pageRequest);
 
     List<CV> findByNom(String filtre);
+
 }

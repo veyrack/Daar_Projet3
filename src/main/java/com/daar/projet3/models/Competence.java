@@ -34,5 +34,8 @@ public enum Competence {
     swift,
     typescript,
     uml,
-    vba
-}
+    vba,
+    C,
+
+
+    }

@@ -1,13 +1,16 @@
 package com.daar.projet3.utils;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
+import java.nio.file.Paths;
+import java.util.*;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import com.daar.projet3.models.CV;
 import com.daar.projet3.models.Competence;
+import io.netty.util.HashedWheelTimer;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.text.PDFTextStripper;
 
@@ -19,7 +22,7 @@ public class ParsingPDF {
         //public CV parsePDF(String filename) throws FormatException{
         //String cv = filename;
         String cv = "CV_Veyrack.pdf";//"Brunet_Maxence_CV.pdf";
-        //cv= "CV_MADAFRITE1.pdf";
+        //cv= "CVMalek.pdf";
         File file = new File ("src/main/java/com/daar/projet3/utils/ressources/"+cv);
         PDDocument doc;
 
@@ -28,6 +31,7 @@ public class ParsingPDF {
             doc = PDDocument.load(file);
             PDFTextStripper stripper = new PDFTextStripper();
             String text = stripper.getText(doc);
+            //System.out.println(text);
             if(text.trim().equals("")) {
                 //throw new FormatException;
                 System.out.println("VIDE");
@@ -40,9 +44,9 @@ public class ParsingPDF {
             //System.out.println(s);
 
             //System.out.println(getEmail(l));
-            for(int i=0;i<5;i++)
-                System.out.println(getAllInfo(l)[i]);
-
+            //System.out.println(getAge(l));
+            //getAllInfo(l);
+            //System.out.println(CompetenceFileToHashSet().contains("C3"));
 
             doc.close();
 
@@ -50,8 +54,17 @@ public class ParsingPDF {
             e.printStackTrace();
         }
 
-
     }
+
+    /**
+     *
+     * @param nom
+     * @param prenom
+     * @param mail
+     * @param tel
+     * @param file : Le CV
+     * @return UN CV
+     */
     public static CV parse(String nom, String prenom, String mail, String tel,File file){
         PDDocument doc;
         CV moncv=null;
@@ -65,25 +78,18 @@ public class ParsingPDF {
                 System.out.println("VIDE");
             }
             String[] l = text.split("\n");
-            //On récupère les infos de l'utilisateur
-            //String [] infos = getAllInfo(l);
 
-            //On récupère ses compétences
-            ArrayList<String> competences = getCompetences(l);
-
-            //On récupère son adresse ? Pour check s'il est a tant de km de l'entreprise
-
-            //On récupère ses centres d'interets
+            //On récupère tous les mots clées du PDF
+            ArrayList<String> allkeyword = getAllKeyWord(l);
 
             //Creation du CV
             moncv= new CV(String.valueOf(cpt++),
                     prenom,
                     nom,
-                    40,
+                    getAge(l),
                     mail,
                     tel,
-                    competences);
-
+                    allkeyword);
 
             doc.close();
 
@@ -96,43 +102,18 @@ public class ParsingPDF {
 
     /**
      *
-     * @param lignes
-     * @return un tableau qui contient (dans cet ordre) -> Nom,Prenom,Age,Mail,Tel
+     * @param lignes : Celles du PDF
+     * @return Tous les mots du PDF
      */
-    private static String [] getAllInfo(String [] lignes){
-        //All info
-        String[] infos= new String[5];
-        //Pour le nom et prenom
-        String prenom=lignes[0].split(" |/|-|\\(|\\)|,")[0];;
-        String nom=lignes[0].split(" |/|-|\\(|\\)|,")[1];;
-
-        //Age
-        String age="";
-
-        // Pour l'email
-        Pattern patternMail = Pattern.compile("^(.+)@(.+)$");
-        String mail = "";
-
-        //Numero de telephone
-        Pattern patternTelephone = Pattern.compile("([0-9]{2}(\\.)*){5}");
-        String tel="";
-
-        //Competences
-        ArrayList<String> competences= new ArrayList<>();
+    private static ArrayList<String> getAllKeyWord(String [] lignes){
+        ArrayList<String> res= new ArrayList<>();
 
         // La recherche dans le pdf
         for(String ligne : lignes){
             for(String mot : ligne.split(" |/|-|\\(|\\)|,")){
-                //System.out.println(mot);
-                try{
-                    //Get email
-                    if(patternMail.matcher(mot).find())
-                        mail=mot;
-                    if(patternTelephone.matcher(mot).find())
-                        tel=mot;
-                    else
-                        competences.add(mot);
 
+                try{
+                  res.add(mot.toLowerCase(Locale.ENGLISH));
                 }catch (IllegalArgumentException e){
                     //System.out.println(e.getMessage());
                     continue;
@@ -140,29 +121,25 @@ public class ParsingPDF {
             }
             //System.out.println("line: "+s);
         }
-        infos[0]=nom;
-        infos[1]=prenom;
-        infos[2]=age;
-        infos[3]=mail;
-        infos[4]=tel;
 
-        return infos;
+
+        return res;
     }
 
     /**
      *
-     * @param lignes
+     * @param lignes : Celles du PDF
      * @return Une arrayList des compétences présentes sur le cv
      */
-    private static ArrayList<String> getCompetences(String [] lignes){
+    private static ArrayList<String> getCompetences(String [] lignes) throws FileNotFoundException {
+        HashSet<String> allCompetences= CompetenceFileToHashSet();
         ArrayList<String> competences= new ArrayList<>();
         for(String ligne : lignes){
             for(String mot : ligne.split(" |/|-|\\(|\\)|,")){
 
                 try{
-                    Object value = Competence.valueOf(mot.toLowerCase()).toString();
-                    if(!competences.contains((String)value))
-                        competences.add((String)value);
+                    if(allCompetences.contains(mot.toLowerCase(Locale.ENGLISH)))
+                        competences.add(mot.toLowerCase(Locale.ENGLISH));
                 }catch (IllegalArgumentException e){
                     //System.out.println(e.getMessage());
                     continue;
@@ -171,6 +148,40 @@ public class ParsingPDF {
             //System.out.println("line: "+s);
         }
         return competences;
+    }
+
+    /**
+     *
+     * @param lignes
+     * @return L'age
+     */
+    private static int getAge(String [] lignes){
+        Pattern p= Pattern.compile("([0-9]{2}) *ans");
+        for(String ligne : lignes){
+           // System.out.println(ligne);
+            Matcher matcher = p.matcher(ligne);
+            if(matcher.find())
+                return Integer.parseInt(matcher.group(1));
+        }
+        return -1; // Dans le cas où la personne n'a pas préciser son age
+    }
+
+    /**
+     *
+     * @return Une hashSet contenant toutes les competences du fichier "Competences"
+     * @throws FileNotFoundException
+     */
+    private static HashSet<String> CompetenceFileToHashSet() throws FileNotFoundException {
+        File file = new File("src/main/java/com/daar/projet3/utils/Competences");
+        HashSet<String> res= new HashSet<>();
+
+        Scanner sc = new Scanner(file);
+            while (sc.hasNextLine()) {
+                String line = sc.nextLine();
+                res.add(line.toLowerCase(Locale.ENGLISH));
+            }
+
+        return res;
     }
 
 }
