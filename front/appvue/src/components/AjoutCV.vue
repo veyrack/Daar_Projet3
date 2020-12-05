@@ -1,6 +1,7 @@
 <template >
   <div class="d-flex justify-center align-center" style="height:100%;">
-    <v-card width="50%">
+    
+    <v-card width="50%" elevation="24" class="pa-4">
       <v-form 
         v-model="valid"
         ref="formcv"
@@ -39,15 +40,12 @@
             type="email"
             required
           ></v-text-field>
-
-          <!-- <input type="file" id="file" accept=".pdf" />
-          <button v-on:click="submitFile()" type="submit" name="envoyer" >Envoyer</button> -->
-          
+       
           <v-file-input
             v-model="fileInput"
             accept=".pdf"
             color="primary"
-            placeholder="Selectionner votre fichier au format pdf"
+            placeholder="Selectionner Cv au format pdf < 5 Mb"
             prepend-icon="mdi-paperclip"
             :show-size="1000"
             :rules="fileRules"
@@ -64,14 +62,6 @@
               </v-chip>
             </template>
           </v-file-input>
-
-          <v-checkbox
-            class="mt-1"
-            :rules="conditionRule"
-            label="Accepter les conditions ?"
-            required
-          ></v-checkbox>
-          
         </v-card-text>
         <v-card-actions>
           <v-spacer></v-spacer>
@@ -92,13 +82,33 @@
         </v-card-actions>
       </v-form>
     </v-card>
+    <v-snackbar
+      v-model="snackbar"
+      :color="notifColor"
+      elevation="24"
+      :timeout="-1"
+    >
+      {{ text }}
+      <template v-slot:action="{ attrs }">
+        <v-btn
+          text
+          icon
+          v-bind="attrs"
+          @click="snackbar = false"
+        >
+          <v-icon class="mdi-24px pr-0">
+            mdi-close-box
+          </v-icon>
+        </v-btn>
+      </template>
+    </v-snackbar>
   </div>
 </template>
 
 <script>
 import axios from 'axios'
 export default {
-  name: 'Accueil',
+  name: 'AjoutCV',
   data: function () {
     return {
       fileInput: [],
@@ -118,43 +128,48 @@ export default {
         v => /^(?:(?:\+|00)33|0)\s*[1-9](?:[\s.-]*\d{2}){4}$/.test(v) || "Numéro invalide",
       ],
       fileRules: [
-        v => !!v || 'Le CV au format pdf est nécessaire',
+        v => !! v || 'Le CV au format pdf est nécessaire',
+        v => {
+            let size = 0;
+            if (v!=null) {
+              size = v.size;
+            }
+            return size < 5000000 || 'Fichier trop volumineux > 10 Mb'
+          }
       ],
-      conditionRule: [
-        v => !!v || 'Vous devez accepter les conditions pour envoyer !'
-      ],
-      valid: true
+      valid: true,
+      snackbar: false,
+      notifColor: "",
+      text: ""
     }
- },
-methods: {
-  filter: function(filtre){
-  //console.log('http://localhost:8080/CV?filtre='+filtre)
-  axios
-  .get('http://localhost:8080/CV?filtre='+filtre)
-  .then(response => (this.listeCV = response.data))
   },
+  methods: {
+    filter: function(filtre){
+    //console.log('http://localhost:8080/CV?filtre='+filtre)
+    axios
+    .get('http://localhost:8080/CV?filtre='+filtre)
+    .then(response => (this.listeCV = response.data))
+    },
 
-  // Recupere les cv
-  getcv: function(){
-  axios
-  .get('http://localhost:8080/CV')
-  .then(response => (this.listeCV = response.data.content))
-  },
+    // Recupere les cv
+    getcv: function(){
+    axios
+    .get('http://localhost:8080/CV')
+    .then(response => (this.listeCV = response.data.content))
+    },
 
-  // Methodes du formulaire
-  validate () {
-    this.$refs.formcv.validate()
-  },
-  reset () {
-    this.$refs.formcv.reset()
-  },
+    // Methodes du formulaire
+    validate () {
+      this.$refs.formcv.validate()
+    },
+    reset () {
+      this.$refs.formcv.reset()
+    },
 
-  //Envoie le fichier pdf au serveur
-  submitFile(){
-    
-    let formData = new FormData();
-
-    if(this.fileInput!=null){
+    //Envoie le fichier pdf au serveur
+    submitFile(){
+      
+      let formData = new FormData();
 
       //Add the form data we need to submit
       formData.append('file', this.fileInput);
@@ -163,7 +178,7 @@ methods: {
       formData.append('mail', this.email);
       formData.append('tel', this.tel);
 
-      console.log(formData);
+      console.log(this.fileInput);
 
       //Make the request to the POST /single-file URL
       axios.post( 'http://localhost:8080/CV/file', //Ici c'est 8080 mais ca peut être différent en fonction du user
@@ -172,18 +187,18 @@ methods: {
         headers: {
             'Content-Type': 'multipart/form-data'
         }
-      }).then(function(){
-        console.log('SUCCESS!!');
+      }).then(() => {
+        this.notifColor="success"
+        this.text="Upload Réussi";
+        this.snackbar=true;
         })
-      .catch(function(p){
-        console.log('FAILURE!!');
-        console.log(p.response)
+      .catch((p) => {
+        this.notifColor="error"
+        this.text="Erreur d'upload";
+        this.snackbar=true;
+        console.log(p.response);
       });
     }
-    else
-      console.log("nope")
   }
-        
-}
 }
 </script>
