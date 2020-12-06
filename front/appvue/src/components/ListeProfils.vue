@@ -1,9 +1,34 @@
 <template>
   <div>
     <v-card
+      height="600"
+      max-width="800"
+      elevation="16"
+      class="mx-auto pb-2 pt-2 pl-2 justify-center"
+      v-if="listProfils.length==0"
+    >
+      <v-card-text 
+        style="width:100%;"
+        class="fill-height d-flex align-center flex-column justify-center"
+      >
+        <h1> Recherche actuelle vide </h1>
+        <p/> <p/> <p/>
+        <h3> Veuillez effectuer une recherche </h3>
+        <p/>
+        <ol>
+          <li> Soit par recherche de nom et ou prénom </li>
+          <li> Soit par conjonction des filtrages</li>
+        </ol>
+        <p/> <p/> <p/>
+        <h3> Rechercher sans filtre revient à retourner toute la base de CV</h3>
+      </v-card-text>
+
+    </v-card>
+    <v-card
       elevation="16"
       max-width="800"
       class="mx-auto pb-2 pt-2 pl-2"
+      v-if="listProfils.length>0"
     >
       <v-virtual-scroll
         :items="listProfils"
@@ -121,14 +146,6 @@ export default {
         this.overlay = !this.overlay;
         this.selectedItem = item;
       }
-    },
-    computed: {
-        items () {
-            return Array.from({ length: this.length }, (k, v) => v + 1);
-      },
-      length () {
-          return 7000;
-      },
     },
 }
 </script>

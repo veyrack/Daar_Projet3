@@ -5,7 +5,16 @@
       <v-col cols="5" lg="4">
         <v-card class="pa-4">
           <v-row>
-            <h3 class="ml-2">Recherche par Nom et/ou Prénom</h3>
+            <h3 class="ml-2 mr-2">Recherche par Nom et/ou Prénom</h3>
+            <v-btn
+              color="primary"
+              class="mx-0" fab x-small
+              :disabled="nom.length+prenom.length==0"
+              @click="profilsNameRecherche">
+              <v-icon dark>
+                mdi-arrow-right-box
+              </v-icon>
+            </v-btn>
           </v-row>
           <v-row>
             <v-col>
@@ -71,7 +80,6 @@
                         medium
                         dark
                         rounded
-                        class=""
                         @click="filtrageRecherche"
                       >
                         <div class="mr-1">
@@ -135,40 +143,77 @@ export default {
         'swift', 'typescript', 'uml', 'vba',
       ],
       degrees: [
-        'bac', 'bac+2', 'bac+3', 'bac+5',
-        'bac+8', 'Bts', 'Dut', 'Licence',
-        'Master', 'Doctorat'
+        'bac', 'Bts', 'Dut', 'Licence',
+        'Master', 'Doctorat', 'Ecole'
       ],
       response: [],
     }
   },
   methods: {
+    profilsNameRecherche(){
+      if(this.nom.length==0){
+        this.getByName("prenom", this.prenom)
+      }
+      else if(this.prenom.length==0){
+        this.getByName("nom", this.nom)
+      } 
+      else {
+        axios
+        .get('http://localhost:8080/CV?nom='+this.nom+"&prenom="+this.prenom)
+        .then(response => (this.response = response.data.content))
+        .catch((p) => {
+          console.log(p)
+        });
+      }
+    },
     filtrageRecherche(){
       if (this.selected.length==0){
-        this.getAllCv();
+        this.getAllCv()
       } else {
-        this.filter();
+        this.filter()
       }
+    },
+    getByName: function(nameType, name){
+      axios
+      .get('http://localhost:8080/CV?'+nameType+"="+name)
+      .then(response => (this.response = response.data.content))
+      .catch((p) => {
+        console.log(p)
+      });
     },
     getAllCv: function(){
       axios
       .get('http://localhost:8080/CV')
       .then(response => (this.response = response.data.content))
       .catch((p) => {
-        console.log("ERREUR All CV")
         console.log(p)
       });
     },
     filter: function(){
-      console.log(this.selected.join(','))
+      var arg = this.wrapFiltrage()
+      console.log(arg)
       axios
-      .get(encodeURI('http://localhost:8080/CV?competences='+this.selected.join(',')))
+      .get('http://localhost:8080/CV?competences='+arg.join(','))
       .then(response => (this.response = response.data))
       .catch((p) => {
-        console.log("ERREUR Requete specifique")
         console.log(p)
       });
     },
+    wrapFiltrage(){
+      var listRes = this.selected;
+      for(var i=0; i<listRes.length; i++){
+        switch(listRes[i]){
+          case "c++":
+            listRes[i]="cpp"
+            break;
+          case "c#":
+            listRes[i]="csharp"
+            break;
+          default:
+        }
+      }
+      return listRes;
+    }
   },
   components: {
     TagSelector,
