@@ -47,7 +47,7 @@
         </v-list-item-icon>
 
         <v-list-item-content>
-          <v-list-item-title> {{ item.tel }} </v-list-item-title>
+          <v-list-item-title> {{ item.numTel }} </v-list-item-title>
           <v-list-item-subtitle>Numéro de téléphone</v-list-item-subtitle>
         </v-list-item-content>
       </v-list-item>

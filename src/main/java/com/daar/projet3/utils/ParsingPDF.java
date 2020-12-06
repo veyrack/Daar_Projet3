@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 import com.daar.projet3.models.CV;
 import org.apache.pdfbox.pdmodel.PDDocument;
@@ -78,7 +79,7 @@ public class ParsingPDF {
 
             //On récupère tous les mots clées et competences du PDF
             ArrayList<String> competences= getCompetences(l);
-            ArrayList<String> allkeyword = getAllKeyWord(l);
+            ArrayList<String> allkeyword = getCompetences(l);
 
             //Creation du CV
             moncv= new CV(String.valueOf(cpt++),
@@ -137,8 +138,15 @@ public class ParsingPDF {
             for(String mot : ligne.split(" |/|-|\\(|\\)|,")){
 
                 try{
-                    if(allCompetences.contains(mot.toLowerCase(Locale.ENGLISH)))
-                        competences.add(mot.toLowerCase(Locale.ENGLISH));
+                    if(allCompetences.contains(mot.toLowerCase(Locale.ENGLISH))){
+                        /*if(mot.toLowerCase(Locale.ENGLISH).equals("c#"))
+                            competences.add("csharp");
+                        else
+                            if(mot.toLowerCase(Locale.ENGLISH).equals("c++"))
+                                competences.add("cpp");
+                            else*/
+                                competences.add(mot.toLowerCase(Locale.ENGLISH));
+                    }
                 }catch (IllegalArgumentException e){
                     //System.out.println(e.getMessage());
                     continue;
@@ -146,7 +154,7 @@ public class ParsingPDF {
             }
             //System.out.println("line: "+s);
         }
-        return competences;
+        return (ArrayList) competences.stream().distinct().collect(Collectors.toList());
     }
 
     /**

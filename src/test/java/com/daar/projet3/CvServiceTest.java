@@ -112,20 +112,20 @@ public class CvServiceTest {
         Page<CV> byFilter1 = cvService.findByMotsCles("Java", PageRequest.of(0,10));
         assertThat(byFilter1.getTotalElements(), is(5L));
     }
-
+*/
     @Test
     public void testDelete() {
         List<String> l = new ArrayList<>();
         l.add("Java");
         l.add("C");
         l.add("Haskell");
-        CV cv = new CV("1001", "Elasticsearch Basics", "Rambabu Posa",23,"a@b.fr","01", l);
+        CV cv = new CV("1003", null, null,23,"a@b.fr","01",null, l);
 
-        cvService.save(cv);
+        //cvService.save(cv);
         cvService.delete(cv);
         CV testBook = cvService.findOne(cv.getId());
         assertNull(testBook);
     }
 
- */
+
 }

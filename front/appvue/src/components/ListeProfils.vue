@@ -5,9 +5,8 @@
       max-width="800"
       class="mx-auto pb-2 pt-2 pl-2"
     >
-        <!-- :items="value" -->
       <v-virtual-scroll
-        :items="[...data, ...data, ...data, ...data, ...data]"
+        :items="listProfils"
         height="600"
         item-height="64"
       >
@@ -89,7 +88,7 @@ import OverlayVue from "./OverlayVue";
 export default {
     name: 'ListeProfils',
     props: {
-        value: Array
+        listProfils: Array
     },
     components: {
       OverlayVue,

@@ -78,13 +78,20 @@ public class CvController {
 
     // /CV?competence
     @GetMapping(params = {"competence"})
-    public ResponseEntity<List<CV>> getCvByCompetences(@RequestParam("filtre") String filtre){
+    public ResponseEntity<List<CV>> getCvByCompetences(@RequestParam("competence") String filtre){
+        /*if (filtre.equals("c#"))
+            filtre="csharp";
+        else
+            if (filtre.equals("c++"))
+                filtre="cpp";*/
         return ResponseEntity.ok(cvService.findByCompetences(filtre));
     }
 
     // /CV?competences
     @GetMapping(params = {"competences"})
-    public ResponseEntity<List<CV>> getCvByCompetences(@RequestParam("filtres") List<String> filtres){
+    public ResponseEntity<List<CV>> getCvByCompetences(@RequestParam("competences") List<String> filtres){
+        /*filtres.set(filtres.indexOf("c#"),"csharp");
+        filtres.set(filtres.indexOf("c++"),"cpp");*/
         return ResponseEntity.ok(cvService.findByCompetences(filtres));
     }
 

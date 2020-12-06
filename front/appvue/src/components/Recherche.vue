@@ -106,7 +106,7 @@
         </v-row>
       </v-col>
       <v-col cols="7" offset-lg="1">
-        <ListeProfils :v-model="response"/>
+        <ListeProfils :listProfils="response"/>
       </v-col>
     </v-row>
   </v-container>
@@ -127,7 +127,7 @@ export default {
       nom: "",
       selected: [],
       programmingLanguages: [
-        'C','C#','C++','caml','clojure', 'cofeescript',
+        'c','c#','c++','caml','clojure', 'cofeescript',
         'css','dotnet','go','groovy','hadoop', 'haskell',
         'html','java','javascript','lua','matlab', 'nosql',
         'objectivec','ocaml', 'perl','php','python','r',
@@ -160,8 +160,9 @@ export default {
       });
     },
     filter: function(){
+      console.log(this.selected.join(','))
       axios
-      .get('http://localhost:8080/CV?filtre='+this.selected.join(','))
+      .get(encodeURI('http://localhost:8080/CV?competences='+this.selected.join(',')))
       .then(response => (this.response = response.data))
       .catch((p) => {
         console.log("ERREUR Requete specifique")
