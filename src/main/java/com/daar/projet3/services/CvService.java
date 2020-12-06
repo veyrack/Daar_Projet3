@@ -32,5 +32,9 @@ public interface CvService {
 
     List<CV> findByMotsCles(List<String> filtre);
 
+    List<CV> findByCompetences(String filtre);
+
+    List<CV> findByCompetences(List<String> filtre);
+
 
 }

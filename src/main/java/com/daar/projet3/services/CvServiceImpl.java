@@ -5,7 +5,10 @@ import com.daar.projet3.repositories.CvRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 
@@ -69,5 +72,12 @@ public class CvServiceImpl implements CvService{
         return cvRepository.findByMotsCles(filtre);
     }
 
+    public List<CV> findByCompetences(String filtre){
+        return cvRepository.findByCompetences(filtre);
+    }
+
+    public List<CV>  findByCompetences(List<String> filtres){
+        return cvRepository.findByCompetences(filtres);
+    }
 
 }

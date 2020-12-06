@@ -27,4 +27,8 @@ public interface CvRepository extends ElasticsearchRepository<CV,String> {
 
     List<CV> findByNom(String filtre);
 
+    List<CV> findByCompetences(String filtre);
+
+    List<CV> findByCompetences(List<String> filtre);
+
 }

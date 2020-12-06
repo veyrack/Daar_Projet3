@@ -76,6 +76,18 @@ public class CvController {
         return ResponseEntity.ok(cvService.findByMotsCles(filtres, PageRequest.of(page,5)));
     }
 
+    // /CV?competence
+    @GetMapping(params = {"competence"})
+    public ResponseEntity<List<CV>> getCvByCompetences(@RequestParam("filtre") String filtre){
+        return ResponseEntity.ok(cvService.findByCompetences(filtre));
+    }
+
+    // /CV?competences
+    @GetMapping(params = {"competences"})
+    public ResponseEntity<List<CV>> getCvByCompetences(@RequestParam("filtres") List<String> filtres){
+        return ResponseEntity.ok(cvService.findByCompetences(filtres));
+    }
+
     // /CV
     @GetMapping
     public ResponseEntity<Iterable<CV>> getCv() {

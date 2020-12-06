@@ -3,14 +3,11 @@ package com.daar.projet3.utils;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.nio.file.Paths;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import com.daar.projet3.models.CV;
-import com.daar.projet3.models.Competence;
-import io.netty.util.HashedWheelTimer;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.text.PDFTextStripper;
 
@@ -79,7 +76,8 @@ public class ParsingPDF {
             }
             String[] l = text.split("\n");
 
-            //On récupère tous les mots clées du PDF
+            //On récupère tous les mots clées et competences du PDF
+            ArrayList<String> competences= getCompetences(l);
             ArrayList<String> allkeyword = getAllKeyWord(l);
 
             //Creation du CV
@@ -89,6 +87,7 @@ public class ParsingPDF {
                     getAge(l),
                     mail,
                     tel,
+                    competences,
                     allkeyword);
 
             doc.close();
