@@ -5,7 +5,7 @@
       max-width="800"
       elevation="16"
       class="mx-auto pb-2 pt-2 pl-2 justify-center"
-      v-if="listProfils.length==0"
+      v-if="listProfils==null || listProfils.length==0"
     >
       <v-card-text 
         style="width:100%;"
@@ -28,7 +28,7 @@
       elevation="16"
       max-width="800"
       class="mx-auto pb-2 pt-2 pl-2"
-      v-if="listProfils.length>0"
+      v-if="listProfils != null && listProfils.length>0"
     >
       <v-virtual-scroll
         :items="listProfils"

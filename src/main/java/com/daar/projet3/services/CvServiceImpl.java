@@ -40,32 +40,20 @@ public class CvServiceImpl implements CvService{
         else return null;
     }
 
-    public Page<CV> findByPrenom(String filtre, PageRequest pageRequest) {
-        return cvRepository.findByPrenom(filtre,pageRequest);
-    }
-
     public List<CV> findByPrenom(String filtre) {
         return cvRepository.findByPrenom(filtre);
-    }
-
-    public Page<CV> findByNom(String filtre, PageRequest pageRequest) {
-        return cvRepository.findByNom(filtre,pageRequest);
     }
 
     public List<CV> findByNom(String filtre) {
         return cvRepository.findByNom(filtre);
     }
 
-    public Page<CV> findByMotsCles(String filtre, PageRequest pageRequest) {
-        return cvRepository.findByMotsCles(filtre,pageRequest);
+    public List<CV> findByNomAndPrenom(String nom, String prenom) {
+        return cvRepository.findByNomAndPrenom(nom,prenom);
     }
 
     public List<CV> findByMotsCles(String filtre) {
         return cvRepository.findByMotsCles(filtre);
-    }
-
-    public Page<CV> findByMotsCles(List<String> filtre, PageRequest pageRequest) {
-        return cvRepository.findByMotsCles(filtre,pageRequest);
     }
 
     public List<CV> findByMotsCles(List<String> filtre) {
@@ -79,5 +67,23 @@ public class CvServiceImpl implements CvService{
     public List<CV>  findByCompetences(List<String> filtres){
         return cvRepository.findByCompetences(filtres);
     }
+
+    /*
+    public Page<CV> findByPrenom(String filtre, PageRequest pageRequest) {
+        return cvRepository.findByPrenom(filtre,pageRequest);
+    }
+
+    public Page<CV> findByNom(String filtre, PageRequest pageRequest) {
+        return cvRepository.findByNom(filtre,pageRequest);
+    }
+
+    public Page<CV> findByMotsCles(String filtre, PageRequest pageRequest) {
+        return cvRepository.findByMotsCles(filtre,pageRequest);
+    }
+
+    public Page<CV> findByMotsCles(List<String> filtre, PageRequest pageRequest) {
+        return cvRepository.findByMotsCles(filtre,pageRequest);
+    }
+     */
 
 }

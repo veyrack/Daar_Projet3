@@ -21,9 +21,15 @@ public class Projet3Application {
 
 	}
 
+	/**
+	 * methodes utilisees pour des test
+	 * @param args
+	 * @throws Exception
+	 */
+	/*
 	public void run(String... args) throws Exception {
 
-		/*
+
 		printElasticSearchInfo();
 		List<String> l = new ArrayList<>();
 		List<String> l2 = new ArrayList<>();
@@ -43,10 +49,9 @@ public class Projet3Application {
 		//List<Book> books = bookService.findByTitle("Elasticsearch Basics");
 
 		System.out.println(cv);
-		*/
 
 	}
-	/*
+
 	private void printElasticSearchInfo() {
 
 		System.out.println("--ElasticSearch--");

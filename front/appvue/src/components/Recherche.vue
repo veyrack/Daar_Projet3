@@ -143,7 +143,7 @@ export default {
         'swift', 'typescript', 'uml', 'vba',
       ],
       degrees: [
-        'bac', 'Bts', 'Dut', 'Licence',
+        'Baccalauréat', 'Bts', 'Dut', 'Licence',
         'Master', 'Doctorat', 'Ecole'
       ],
       response: [],
@@ -160,7 +160,7 @@ export default {
       else {
         axios
         .get('http://localhost:8080/CV?nom='+this.nom+"&prenom="+this.prenom)
-        .then(response => (this.response = response.data.content))
+        .then(response => (this.response = response.data))
         .catch((p) => {
           console.log(p)
         });
@@ -176,7 +176,7 @@ export default {
     getByName: function(nameType, name){
       axios
       .get('http://localhost:8080/CV?'+nameType+"="+name)
-      .then(response => (this.response = response.data.content))
+      .then(response => (this.response = response.data))
       .catch((p) => {
         console.log(p)
       });
@@ -193,7 +193,7 @@ export default {
       var arg = this.wrapFiltrage()
       console.log(arg)
       axios
-      .get('http://localhost:8080/CV?competences='+arg.join(','))
+      .get('http://localhost:8080/CV?filtres='+arg.join(','))
       .then(response => (this.response = response.data))
       .catch((p) => {
         console.log(p)

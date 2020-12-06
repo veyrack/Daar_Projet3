@@ -1,12 +1,14 @@
 # Daar_Projet3
 
-## Installation
+Projet d'indexation des CVs dans Elasticsearch
+
+## Installation du back
 
 - Elasticsearch 7.10.0 : 
 
  https://www.elastic.co/fr/downloads/elasticsearch
 
-- Kibana 7.10.0 :
+- (facultatif) Kibana 7.10.0 :
  
  https://www.elastic.co/fr/downloads/kibana
 
@@ -14,7 +16,7 @@
 
 - IntelliJ ultimate (gratuit avec le mail de la fac) ou la version classique
 
-- Postman pour visualiser les appels à l'API
+- (facultatif) Postman pour visualiser les appels à l'API
 
 - Lancer les services :
 
@@ -58,3 +60,19 @@ Acces à kibana :
 Une fois dessus il faut créer un index patern pour les CV
 
 Ensuite il est possible de créer un vizualiser pour voir les données
+
+
+## Installation du front
+
+- Se rendre dans le repertoire front/appvue et lancer : 
+    
+        npm install
+    puis
+    
+        npm run serve -- --port 8081
+        
+    Le port spécifié permet de ne pas lancer le front sur le même port que le back
+    
+Le site est donc accessible sur :
+
+ http://localhost:8081

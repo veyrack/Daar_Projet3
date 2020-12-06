@@ -43,7 +43,7 @@
        
           <v-file-input
             v-model="fileInput"
-            accept=".pdf"
+            accept=".pdf,.docx"
             color="primary"
             placeholder="Selectionner Cv au format pdf < 5 Mb"
             prepend-icon="mdi-paperclip"

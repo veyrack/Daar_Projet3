@@ -16,25 +16,24 @@ public interface CvService {
 
     CV findOne(String id);
 
-    Page<CV> findByPrenom(String filtre, PageRequest pageRequest);
-
     List<CV> findByPrenom(String filtre);
-
-    Page<CV> findByNom(String filtre, PageRequest pageRequest);
 
     List<CV> findByNom(String filtre);
 
-    Page<CV> findByMotsCles(String filtre, PageRequest pageRequest);
+    List<CV> findByNomAndPrenom(String nom, String prenom);
 
     List<CV> findByMotsCles(String filtre);
-
-    Page<CV> findByMotsCles(List<String> filtre, PageRequest pageRequest);
 
     List<CV> findByMotsCles(List<String> filtre);
 
     List<CV> findByCompetences(String filtre);
 
     List<CV> findByCompetences(List<String> filtre);
+
+    //Page<CV> findByPrenom(String filtre, PageRequest pageRequest);
+    //Page<CV> findByNom(String filtre, PageRequest pageRequest);
+    //Page<CV> findByMotsCles(String filtre, PageRequest pageRequest);
+    //Page<CV> findByMotsCles(List<String> filtre, PageRequest pageRequest);
 
 
 }

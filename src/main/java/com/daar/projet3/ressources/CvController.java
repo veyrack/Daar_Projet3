@@ -2,7 +2,6 @@ package com.daar.projet3.ressources;
 
 import com.daar.projet3.models.CV;
 import com.daar.projet3.services.CvService;
-import com.daar.projet3.utils.Decodeur;
 import com.daar.projet3.utils.ParsingPDF;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -31,24 +30,17 @@ public class CvController {
         return ResponseEntity.ok(cvService.findByPrenom(prenom));
     }
 
-    // /CV/prenom/0?prenom=Jean
-    @GetMapping("/prenom/{page}")
-    public ResponseEntity<Page<CV>> getCvByPrenom(@RequestParam("prenom") String prenom,
-                                                  @PathVariable("page") int page){
-        return ResponseEntity.ok(cvService.findByPrenom(prenom, PageRequest.of(page,5)));
-    }
-
     // /CV?nom=Lin
     @GetMapping(params = {"nom"})
     public ResponseEntity<List<CV>> getCvByNom(@RequestParam("nom") String nom){
         return ResponseEntity.ok(cvService.findByNom(nom));
     }
 
-    // /CV/nom/0?nom=Lin
-    @GetMapping("/nom/{page}")
-    public ResponseEntity<Page<CV>> getCvByNom(@RequestParam("nom") String nom,
-                                               @PathVariable("page") int page){
-        return ResponseEntity.ok(cvService.findByNom(nom, PageRequest.of(page,5)));
+    // /CV?nom=Lin&prenom=Veyrack
+    @GetMapping(params = {"nom","prenom"})
+    public ResponseEntity<List<CV>> getCvByNomAndPrenom(@RequestParam("nom") String nom,
+                                               @RequestParam("prenom") String prenom){
+        return ResponseEntity.ok(cvService.findByNomAndPrenom(nom,prenom));
     }
 
     // /CV?filtre=Java
@@ -57,25 +49,11 @@ public class CvController {
         return ResponseEntity.ok(cvService.findByMotsCles(filtre));
     }
 
-    // /CV/filtre/0?filtre=Java
-    @GetMapping("/filtre/{page}")
-    public ResponseEntity<Page<CV>> getCvByMotsCles(@RequestParam("filtre") String filtre,
-                                                    @PathVariable("page") int page){
-        return ResponseEntity.ok(cvService.findByMotsCles(filtre, PageRequest.of(page,5)));
-    }
-
     // /CV?filtres=Java,C
     @GetMapping(params = {"filtres"})
     public ResponseEntity<List<CV>> getCvByMotsCles(@RequestParam("filtres") List<String> filtres){
 
         return ResponseEntity.ok(cvService.findByMotsCles(filtres));
-    }
-
-    // /CV/filtres/0?filtres=Java,C
-    @GetMapping("/filtres/{page}")
-    public ResponseEntity<Page<CV>> getCvByMotsCles(@RequestParam("filtres") List<String> filtres,
-                                                    @PathVariable("page") int page){
-        return ResponseEntity.ok(cvService.findByMotsCles(filtres, PageRequest.of(page,5)));
     }
 
     // /CV?competence
@@ -96,7 +74,6 @@ public class CvController {
         return ResponseEntity.ok(cvService.findAll());
     }
 
-
     @PostMapping
     public ResponseEntity<CV> create(@RequestBody CV cv) {
         return ResponseEntity.created(URI.create("/CV")).body(cvService.save(cv));
@@ -113,15 +90,53 @@ public class CvController {
             throws IOException {
 
         // La conversion d'un multipartfile en file. Mettre dans une methode dans le parsingPDF
-        File convFile = new File( file.getOriginalFilename() );
+        File convFile = new File( "src/main/java/com/daar/projet3/utils/ressources/"+file.getOriginalFilename());
         FileOutputStream fos = new FileOutputStream( convFile );
         fos.write( file.getBytes() );
         fos.close();
         //La creation du CV
-        CV cv =ParsingPDF.parse(nom,prenom,mail,tel,convFile);
+        CV cv;
+        //Si c'est un .docx
+        if(convFile.getPath().split("\\.")[1].equals("docx"))
+            cv =ParsingPDF.parseDocx(nom,prenom,mail,tel,convFile);
+        //Si c'est un .pdf
+        else
+            cv =ParsingPDF.parse(nom,prenom,mail,tel,convFile);
         //L'envoie vers la BD
         return ResponseEntity.created(URI.create("/CV")).body(cvService.save(cv));
     }
 
 
+
+    /*
+    Requetes avec des pages (non utilisés)
+
+    // /CV/prenom/0?prenom=Jean
+    @GetMapping("/prenom/{page}")
+    public ResponseEntity<Page<CV>> getCvByPrenom(@RequestParam("prenom") String prenom,
+                                                  @PathVariable("page") int page){
+        return ResponseEntity.ok(cvService.findByPrenom(prenom, PageRequest.of(page,5)));
+    }
+
+    // /CV/nom/0?nom=Lin
+    @GetMapping("/nom/{page}")
+    public ResponseEntity<Page<CV>> getCvByNom(@RequestParam("nom") String nom,
+                                               @PathVariable("page") int page){
+        return ResponseEntity.ok(cvService.findByNom(nom, PageRequest.of(page,5)));
+    }
+
+    // /CV/filtre/0?filtre=Java
+    @GetMapping("/filtre/{page}")
+    public ResponseEntity<Page<CV>> getCvByMotsCles(@RequestParam("filtre") String filtre,
+                                                    @PathVariable("page") int page){
+        return ResponseEntity.ok(cvService.findByMotsCles(filtre, PageRequest.of(page,5)));
+    }
+
+
+    // /CV/filtres/0?filtres=Java,C
+    @GetMapping("/filtres/{page}")
+    public ResponseEntity<Page<CV>> getCvByMotsCles(@RequestParam("filtres") List<String> filtres,
+                                                    @PathVariable("page") int page){
+        return ResponseEntity.ok(cvService.findByMotsCles(filtres, PageRequest.of(page,5)));
+    }*/
 }

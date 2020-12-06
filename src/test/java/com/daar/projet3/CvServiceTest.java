@@ -7,8 +7,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.elasticsearch.core.ElasticsearchRestTemplate;
 import org.springframework.test.context.junit4.SpringRunner;
 
@@ -28,7 +26,7 @@ public class CvServiceTest {
 
     @Autowired
     private ElasticsearchRestTemplate esTemplate;
-/*
+
     @Before
     public void before() {
 
@@ -46,7 +44,7 @@ public class CvServiceTest {
         l.add("Java");
         l.add("C");
         l.add("Haskell");
-        //CV cv = new CV("1001", "Jean", "Lin",23,"a@b.fr","01", l);
+        CV cv = new CV("1001", "Jean", "Lin",23,"a@b.fr","01", l,l);
         CV testCv = cvService.save(cv);
 
         assertNotNull(testCv.getId());
@@ -61,7 +59,7 @@ public class CvServiceTest {
         l.add("Java");
         l.add("C");
         l.add("Haskell");
-        CV cv = new CV("1001", "Jean", "Lin",23,"a@b.fr","01", l);
+        CV cv = new CV("1001", "Jean", "Lin",23,"a@b.fr","01",l, l);
         cvService.save(cv);
 
         CV testCV = cvService.findOne(cv.getId());
@@ -78,7 +76,7 @@ public class CvServiceTest {
         l.add("Java");
         l.add("C");
         l.add("Haskell");
-        CV cv = new CV("1001", "Jean", "Lin",23,"a@b.fr","01", l);
+        CV cv = new CV("1001", "Jean", "Lin",23,"a@b.fr","01",l, l);
         cvService.save(cv);
 
         List<CV> byFilter = cvService.findByMotsCles("Java");
@@ -87,39 +85,12 @@ public class CvServiceTest {
     }
 
     @Test
-    public void testFindByMots() {
-
-        List<String> l = new ArrayList<>();
-        List<String> l2 = new ArrayList<>();
-        l.add("Java");
-        l.add("C");
-        l.add("Haskell");
-        l2.add("Java");
-
-        List<CV> cvList = new ArrayList<>();
-        cvList.add(new CV("1001", "Jean", "Lin",23,"a@b.fr","01", l));
-        cvList.add(new CV("1002", "Claude", "Lil",23,"a@b.fr","01", l2));
-        cvList.add(new CV("1003", "Pedro", "Lo",23,"a@b.fr","01", l2));
-        cvList.add(new CV("1007", "George", "Lala",23,"a@b.fr","01", l));
-        cvList.add(new CV("1008", "Max", "Li",23,"a@b.fr","01", l));
-
-        for (CV cv : cvList)
-            cvService.save(cv);
-
-        Page<CV> byFilter = cvService.findByMotsCles("C", PageRequest.of(0,10));
-        assertThat(byFilter.getTotalElements(), is(3L));
-
-        Page<CV> byFilter1 = cvService.findByMotsCles("Java", PageRequest.of(0,10));
-        assertThat(byFilter1.getTotalElements(), is(5L));
-    }
-*/
-    @Test
     public void testDelete() {
         List<String> l = new ArrayList<>();
         l.add("Java");
         l.add("C");
         l.add("Haskell");
-        CV cv = new CV("1003", null, null,23,"a@b.fr","01",null, l);
+        CV cv = new CV("2", null, null,23,"a@b.fr","01",null, l);
 
         //cvService.save(cv);
         cvService.delete(cv);

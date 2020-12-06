@@ -1,10 +1,9 @@
 package com.daar.projet3.utils;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -13,16 +12,24 @@ import java.util.stream.Collectors;
 import com.daar.projet3.models.CV;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.text.PDFTextStripper;
+import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
+import org.apache.poi.openxml4j.opc.OPCPackage;
+import org.apache.poi.xwpf.extractor.XWPFWordExtractor;
+import org.apache.poi.xwpf.usermodel.XWPFDocument;
 
 
 public class ParsingPDF {
     private static int cpt=0;
 
+    /**
+     * Main reservé aux test de la classe
+     * @param args
+     */
     public static void main(String[] args) {
         //public CV parsePDF(String filename) throws FormatException{
         //String cv = filename;
         String cv = "CV_Veyrack.pdf";//"Brunet_Maxence_CV.pdf";
-        //cv= "CVMalek.pdf";
+        //cv= "CV_Malek.pdf";
         File file = new File ("src/main/java/com/daar/projet3/utils/ressources/"+cv);
         PDDocument doc;
 
@@ -57,7 +64,7 @@ public class ParsingPDF {
     }
 
     /**
-     *
+     * Parse un fichier .pdf
      * @param nom
      * @param prenom
      * @param mail
@@ -65,23 +72,63 @@ public class ParsingPDF {
      * @param file : Le CV
      * @return UN CV
      */
-    public static CV parse(String nom, String prenom, String mail, String tel,File file){
+    public static CV parse(String nom, String prenom, String mail, String tel,File file) throws IOException{
         PDDocument doc;
+        CV moncv;
+
+        doc = PDDocument.load(file);
+        PDFTextStripper stripper = new PDFTextStripper();
+        String text = stripper.getText(doc);
+        if(text.trim().equals("")) {
+            throw new IOException("Format non valide");
+            //System.out.println("VIDE");
+        }
+        String[] l = text.split("\n");
+
+        //On récupère tous les mots clées et competences du PDF
+        ArrayList<String> competences= getCompetences(l);
+        ArrayList<String> allkeyword = getAllKeyWord(l);
+
+        //Creation du CV
+        moncv= new CV(String.valueOf(cpt++),
+                prenom,
+                nom,
+                getAge(l),
+                mail,
+                tel,
+                competences,
+                allkeyword);
+
+        doc.close();
+        return moncv;
+    }
+
+    /**
+     * parse un fichier .docx
+     * @param nom
+     * @param prenom
+     * @param mail
+     * @param tel
+     * @param file : Le CV
+     * @return UN CV
+     */
+    public static CV parseDocx(String nom, String prenom, String mail, String tel,File file) throws IOException{
         CV moncv=null;
         try {
-
-            doc = PDDocument.load(file);
-            PDFTextStripper stripper = new PDFTextStripper();
-            String text = stripper.getText(doc);
+            FileInputStream fis = new FileInputStream(file);
+            XWPFDocument xdoc = new XWPFDocument(OPCPackage.open(fis));
+            XWPFWordExtractor extractor = new XWPFWordExtractor(xdoc);
+            String text = extractor.getText();
             if(text.trim().equals("")) {
-                //throw new FormatException;
-                System.out.println("VIDE");
+                throw new IOException("Format non valide");
+                //System.out.println("VIDE");
             }
-            String[] l = text.split("\n");
 
+            String[] l = text.split("\\s");
+            Arrays.stream(l).forEach(System.out::println);
             //On récupère tous les mots clées et competences du PDF
             ArrayList<String> competences= getCompetences(l);
-            ArrayList<String> allkeyword = getAllKeyWord(l);
+            ArrayList<String> allkeyword = getCompetences(l);
 
             //Creation du CV
             moncv= new CV(String.valueOf(cpt++),
@@ -93,17 +140,19 @@ public class ParsingPDF {
                     competences,
                     allkeyword);
 
-            doc.close();
+            fis.close();
 
-        } catch (IOException e) {
+        } catch (InvalidFormatException e) {
             e.printStackTrace();
         }
 
         return moncv;
+
+
     }
 
     /**
-     *
+     * recupere tout les mots cles du document
      * @param lignes : Celles du PDF
      * @return Tous les mots du PDF
      */
@@ -115,7 +164,14 @@ public class ParsingPDF {
             for(String mot : ligne.split(" |/|-|\\(|\\)|,")){
 
                 try{
-                  res.add(mot.toLowerCase(Locale.ENGLISH));
+                    if(mot.toLowerCase(Locale.ENGLISH).equals("c#".toLowerCase(Locale.ENGLISH)))
+                        res.add("csharp");
+                    else
+                        if(mot.toLowerCase(Locale.ENGLISH).equals("c++".toLowerCase(Locale.ENGLISH)))
+                            res.add("cpp");
+                        else
+                            if(!mot.toLowerCase(Locale.ENGLISH).matches("| |à|de|je|un|et|une|en|d'un|d'une|le|la|avec|:|\\|"))
+                                res.add(mot.toLowerCase(Locale.ENGLISH));
                 }catch (IllegalArgumentException e){
                     //System.out.println(e.getMessage());
                     continue;
@@ -123,13 +179,12 @@ public class ParsingPDF {
             }
             //System.out.println("line: "+s);
         }
-
-
-        return res;
+        return (ArrayList) res.stream().distinct().collect(Collectors.toList());
     }
 
     /**
-     *
+     * recupere toute les competences du document
+     * Les competences sont celles listees dans le fichier Competences
      * @param lignes : Celles du PDF
      * @return Une arrayList des compétences présentes sur le cv
      */
@@ -160,7 +215,7 @@ public class ParsingPDF {
     }
 
     /**
-     *
+     * Recupere l'age dans le document si le format "* ans" est reconnu
      * @param lignes
      * @return L'age
      */
