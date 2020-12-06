@@ -144,20 +144,6 @@ export default {
     }
   },
   methods: {
-    filter: function(filtre){
-    //console.log('http://localhost:8080/CV?filtre='+filtre)
-    axios
-    .get('http://localhost:8080/CV?filtre='+filtre)
-    .then(response => (this.listeCV = response.data))
-    },
-
-    // Recupere les cv
-    getcv: function(){
-    axios
-    .get('http://localhost:8080/CV')
-    .then(response => (this.listeCV = response.data.content))
-    },
-
     // Methodes du formulaire
     validate () {
       this.$refs.formcv.validate()
@@ -187,10 +173,11 @@ export default {
         headers: {
             'Content-Type': 'multipart/form-data'
         }
-      }).then(() => {
+      }).then((p) => {
         this.notifColor="success"
         this.text="Upload Réussi";
         this.snackbar=true;
+        console.log(p);
         })
       .catch((p) => {
         this.notifColor="error"
