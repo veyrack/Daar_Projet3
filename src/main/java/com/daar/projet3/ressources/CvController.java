@@ -2,6 +2,7 @@ package com.daar.projet3.ressources;
 
 import com.daar.projet3.models.CV;
 import com.daar.projet3.services.CvService;
+import com.daar.projet3.utils.Decodeur;
 import com.daar.projet3.utils.ParsingPDF;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -66,6 +67,7 @@ public class CvController {
     // /CV?filtres=Java,C
     @GetMapping(params = {"filtres"})
     public ResponseEntity<List<CV>> getCvByMotsCles(@RequestParam("filtres") List<String> filtres){
+
         return ResponseEntity.ok(cvService.findByMotsCles(filtres));
     }
 
@@ -79,19 +81,12 @@ public class CvController {
     // /CV?competence
     @GetMapping(params = {"competence"})
     public ResponseEntity<List<CV>> getCvByCompetences(@RequestParam("competence") String filtre){
-        /*if (filtre.equals("c#"))
-            filtre="csharp";
-        else
-            if (filtre.equals("c++"))
-                filtre="cpp";*/
         return ResponseEntity.ok(cvService.findByCompetences(filtre));
     }
 
     // /CV?competences
     @GetMapping(params = {"competences"})
     public ResponseEntity<List<CV>> getCvByCompetences(@RequestParam("competences") List<String> filtres){
-        /*filtres.set(filtres.indexOf("c#"),"csharp");
-        filtres.set(filtres.indexOf("c++"),"cpp");*/
         return ResponseEntity.ok(cvService.findByCompetences(filtres));
     }
 
@@ -127,4 +122,6 @@ public class CvController {
         //L'envoie vers la BD
         return ResponseEntity.created(URI.create("/CV")).body(cvService.save(cv));
     }
+
+
 }

@@ -3,6 +3,8 @@ package com.daar.projet3.utils;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -79,7 +81,7 @@ public class ParsingPDF {
 
             //On récupère tous les mots clées et competences du PDF
             ArrayList<String> competences= getCompetences(l);
-            ArrayList<String> allkeyword = getCompetences(l);
+            ArrayList<String> allkeyword = getAllKeyWord(l);
 
             //Creation du CV
             moncv= new CV(String.valueOf(cpt++),
@@ -139,12 +141,12 @@ public class ParsingPDF {
 
                 try{
                     if(allCompetences.contains(mot.toLowerCase(Locale.ENGLISH))){
-                        /*if(mot.toLowerCase(Locale.ENGLISH).equals("c#"))
+                        if(mot.toLowerCase(Locale.ENGLISH).equals("c#".toLowerCase(Locale.ENGLISH)))
                             competences.add("csharp");
                         else
-                            if(mot.toLowerCase(Locale.ENGLISH).equals("c++"))
+                            if(mot.toLowerCase(Locale.ENGLISH).equals("c++".toLowerCase(Locale.ENGLISH)))
                                 competences.add("cpp");
-                            else*/
+                            else
                                 competences.add(mot.toLowerCase(Locale.ENGLISH));
                     }
                 }catch (IllegalArgumentException e){
